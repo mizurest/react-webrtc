@@ -71,7 +71,7 @@ const InputFormLocal = (props) => {
     }
   },[name])
 
-  const submitLocalName = (e) => {
+  const initLocalName = (e) => {
     console.log(`SUBMIT!${name}`)
     setLocalName(name)
     e.preventDefault()
@@ -89,7 +89,7 @@ const InputFormLocal = (props) => {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            名前を入力してください
+            あなたの名前を入力してください
           </Typography>
           <form className={classes.form} noValidate>
             <TextField
@@ -97,7 +97,7 @@ const InputFormLocal = (props) => {
               margin="normal"
               required
               fullWidth
-              label="名前"
+              label="あなたの名前"
               name="email"
               autoComplete="name"
               autoFocus
@@ -105,7 +105,7 @@ const InputFormLocal = (props) => {
               onChange={(e) => { setName(e.target.value) }}
               onKeyDown={(e) => {
                 if(e.target.value === '' || isComposed) return // 空文字状態か変換中のエンター押下の場合、処理を止める
-                if(e.key === "Enter") { submitLocalName(e) } // それ以外のエンター押下、名前を保持
+                if(e.key === "Enter") { initLocalName(e) } // それ以外のエンター押下、名前を保持
               }}
               onCompositionStart={() => setIsComposed(true)}
               onCompositionEnd={() => setIsComposed(false)}
@@ -117,7 +117,7 @@ const InputFormLocal = (props) => {
               color="primary"
               className={classes.submit}
               disabled={disable}
-              onClick={(e) => { submitLocalName(e) }} // ボタンクリックで名前を保持
+              onClick={(e) => { initLocalName(e) }} // ボタンクリックで名前を保持
             >
               登録
             </Button>

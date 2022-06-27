@@ -19,6 +19,7 @@ getMedia();
 const App = () => {
   const [localName, setLocalName] = useState('') // 自分の名前を保持するState
   const [remoteName, setRemoteName] = useState('') // 相手の名前を保持するState
+  console.log({localName, remoteName})
   return (
     <>
       <InputFormLocal
@@ -26,6 +27,7 @@ const App = () => {
         setLocalName={setLocalName}
       />
       <InputFormRemote
+        localName={localName}
         remoteName={remoteName}
         setRemoteName={setRemoteName}
       />

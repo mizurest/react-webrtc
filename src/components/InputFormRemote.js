@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -56,8 +56,28 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const InputFormRemote = (props) => {
-  const { remoteName, setRemoteName } = props;
   const classes = useStyles();
+
+  const { localName, remoteName, setRemoteName } = props;
+  const [disable, setDisable] = useState(true)
+  const [name, setName] = useState('')
+  const [isComposed, setIsComposed] = useState(false)
+
+  useEffect(()=>{
+    if(name.length === 0){
+      setDisable(true)
+    }else{
+      setDisable(false)
+    }
+  },[name])
+
+  const initRemoteName = (e) => {
+    console.log(`SUBMIT!${name}`)
+    setRemoteName(name)
+    e.preventDefault()
+  }
+
+  if(localName === '' || remoteName !== '') return <></> // 名前が入力されていたらフォームを表示しない
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -69,7 +89,7 @@ const InputFormRemote = (props) => {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            通話する相手の名前を入力してください
+            通話相手の名前を入力してください
           </Typography>
           <form className={classes.form} noValidate>
             <TextField
@@ -81,6 +101,14 @@ const InputFormRemote = (props) => {
               name="email"
               autoComplete="name"
               autoFocus
+              value={name}
+              onChange={(e) => { setName(e.target.value) }}
+              onKeyDown={(e) => {
+                if(e.target.value === '' || isComposed) return // 空文字状態か変換中のエンター押下の場合、処理を止める
+                if(e.key === "Enter") { initRemoteName(e) } // それ以外のエンター押下、名前を保持
+              }}
+              onCompositionStart={() => setIsComposed(true)}
+              onCompositionEnd={() => setIsComposed(false)}
             />
             <Button
               type="submit"
@@ -88,6 +116,8 @@ const InputFormRemote = (props) => {
               variant="contained"
               color="primary"
               className={classes.submit}
+              disabled={disable}
+              onClick={(e) => { initRemoteName(e) }} // ボタンクリックで名前を保持
             >
               登録
             </Button>
