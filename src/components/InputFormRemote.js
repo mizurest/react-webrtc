@@ -55,7 +55,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const InputFormRemote = () => {
+const InputFormRemote = (props) => {
+  const { remoteName, setRemoteName } = props;
   const classes = useStyles();
 
   return (

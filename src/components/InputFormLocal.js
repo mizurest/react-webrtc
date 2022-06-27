@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -55,8 +55,29 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const InputFormLocal = () => {
+const InputFormLocal = (props) => {
   const classes = useStyles();
+
+  const { localName, setLocalName } = props;
+  const [disable, setDisable] = useState(true)
+  const [name, setName] = useState('')
+  const [isComposed, setIsComposed] = useState(false)
+
+  useEffect(()=>{
+    if(name.length === 0){
+      setDisable(true)
+    }else{
+      setDisable(false)
+    }
+  },[name])
+
+  const submitLocalName = (e) => {
+    console.log(`SUBMIT!${name}`)
+    setLocalName(name)
+    e.preventDefault()
+  }
+
+  if(localName !== '') return <></> // 名前が入力されていたらフォームを表示しない
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -80,6 +101,14 @@ const InputFormLocal = () => {
               name="email"
               autoComplete="name"
               autoFocus
+              value={name}
+              onChange={(e) => { setName(e.target.value) }}
+              onKeyDown={(e) => {
+                if(e.target.value === '' || isComposed) return // 空文字状態か変換中のエンター押下の場合、処理を止める
+                if(e.key === "Enter") { submitLocalName(e) } // それ以外のエンター押下、名前を保持
+              }}
+              onCompositionStart={() => setIsComposed(true)}
+              onCompositionEnd={() => setIsComposed(false)}
             />
             <Button
               type="submit"
@@ -87,6 +116,8 @@ const InputFormLocal = () => {
               variant="contained"
               color="primary"
               className={classes.submit}
+              disabled={disable}
+              onClick={(e) => { submitLocalName(e) }} // ボタンクリックで名前を保持
             >
               登録
             </Button>
