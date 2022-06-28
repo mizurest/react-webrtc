@@ -1,11 +1,13 @@
 import React, { useRef, useEffect } from 'react';
+import Video from './Video';
 
-const VideoLocal = () => {
+const VideoLocal = (props) => {
+  const { localName } = props
     const videoRef = useRef(null)
     const currentVideoRef = videoRef.current
 
     useEffect(() => {
-      if(currentVideoRef===null) return
+      if(currentVideoRef === null) return
       const getMedia = async () => {
           const constraints = {audio: true, video: true} //　要求するメディアの種類を指定
         
@@ -22,7 +24,7 @@ const VideoLocal = () => {
     },[currentVideoRef])
 
     return (
-        <div></div>
+      <Video isLocal={true} name={localName} videoRef={videoRef}/>
     );
 }
 

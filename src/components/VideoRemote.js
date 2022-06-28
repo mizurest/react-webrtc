@@ -1,8 +1,12 @@
-const VideoRemote = () => {
+import React, { useRef, useEffect } from 'react';
+import Video from './Video';
+
+const VideoRemote = (props) => {
+    const { remoteName } = props
+    const videoRef = null
+
     return (
-        <div>
-            Enter
-        </div>
+      <Video isLocal={true} name={remoteName} videoRef={videoRef}/>
     );
 }
 

@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 
 import VideoLocal from './VideoLocal';
+import VideoRemote from './VideoRemote'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -11,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const VideoGrid = (props) => {
-    const {localName, RemoteName} = props;
+    const {localName, remoteName} = props;
     const classes = useStyles();
 
         return (
@@ -21,6 +22,7 @@ const VideoGrid = (props) => {
                 <VideoLocal localName={localName}/>
               </Grid>
               <Grid item xs={6}>
+                <VideoRemote remoteName={remoteName}/>
               </Grid>
             </Grid>
           </div>
