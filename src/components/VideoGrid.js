@@ -12,17 +12,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const VideoGrid = (props) => {
-    const {localName, remoteName} = props;
+    const { rtcClient } = props;
     const classes = useStyles();
 
         return (
           <div className={classes.root}>
             <Grid container spacing={3}>
               <Grid item xs={6}>
-                <VideoLocal localName={localName}/>
+                <VideoLocal localName={rtcClient.localName}/>
               </Grid>
               <Grid item xs={6}>
-                <VideoRemote remoteName={remoteName}/>
+                <VideoRemote remoteName={rtcClient.remoteName}/>
               </Grid>
             </Grid>
           </div>

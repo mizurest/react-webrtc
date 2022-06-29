@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
 const InputFormLocal = (props) => {
   const classes = useStyles();
 
-  const { localName, setLocalName } = props;
+  const { rtcClient, setRtcClient } = props;
   const [disable, setDisable] = useState(true)
   const [name, setName] = useState('')
   const [isComposed, setIsComposed] = useState(false)
@@ -71,13 +71,14 @@ const InputFormLocal = (props) => {
     }
   },[name])
 
-  const initLocalName = (e) => {
+  const initLocalName = useCallback((e) => {
     console.log(`SUBMIT!${name}`)
-    setLocalName(name)
+    rtcClient.localName = name
+    setRtcClient(rtcClient)
     e.preventDefault()
-  }
+  }, [name, rtcClient, setRtcClient])
 
-  if(localName !== '') return <></> // 名前が入力されていたらフォームを表示しない
+  if(rtcClient.localName !== '') return <></> // 名前が入力されていたらフォームを表示しない
 
   return (
     <Grid container component="main" className={classes.root}>

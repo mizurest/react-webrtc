@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
 const InputFormRemote = (props) => {
   const classes = useStyles();
 
-  const { localName, remoteName, setRemoteName } = props;
+  const { rtcClient, setRtcClient } = props;
   const [disable, setDisable] = useState(true)
   const [name, setName] = useState('')
   const [isComposed, setIsComposed] = useState(false)
@@ -71,13 +71,14 @@ const InputFormRemote = (props) => {
     }
   },[name])
 
-  const initRemoteName = (e) => {
+  const initRemoteName = useCallback((e) => {
     console.log(`SUBMIT!${name}`)
-    setRemoteName(name)
+    rtcClient.remoteName = name
+    setRtcClient(rtcClient)
     e.preventDefault()
-  }
+  }, [name, rtcClient, setRtcClient])
 
-  if(localName === '' || remoteName !== '') return <></> // 名前が入力されていたらフォームを表示しない
+  if(rtcClient.localName === '' || rtcClient.remoteName !== '') return <></> // 名前が入力されていたらフォームを表示しない
 
   return (
     <Grid container component="main" className={classes.root}>
