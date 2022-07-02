@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
 const InputFormLocal = (props) => {
   const classes = useStyles();
 
-  const { rtcClient, setRtcClient } = props;
+  const { rtcClient } = props;
   const [disable, setDisable] = useState(true)
   const [name, setName] = useState('')
   const [isComposed, setIsComposed] = useState(false)
@@ -74,9 +74,9 @@ const InputFormLocal = (props) => {
   const initLocalName = useCallback((e) => {
     console.log(`SUBMIT!${name}`)
     rtcClient.localName = name
-    setRtcClient(rtcClient)
+    rtcClient.setRtcClient()
     e.preventDefault()
-  }, [name, rtcClient, setRtcClient])
+  }, [name, rtcClient])
 
   if(rtcClient.localName !== '') return <></> // 名前が入力されていたらフォームを表示しない
 

@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
 const InputFormRemote = (props) => {
   const classes = useStyles();
 
-  const { rtcClient, setRtcClient } = props;
+  const { rtcClient } = props;
   const [disable, setDisable] = useState(true)
   const [name, setName] = useState('')
   const [isComposed, setIsComposed] = useState(false)
@@ -74,9 +74,9 @@ const InputFormRemote = (props) => {
   const initRemoteName = useCallback((e) => {
     console.log(`SUBMIT!${name}`)
     rtcClient.remoteName = name
-    setRtcClient(rtcClient)
+    rtcClient.setRtcClient()
     e.preventDefault()
-  }, [name, rtcClient, setRtcClient])
+  }, [name, rtcClient])
 
   if(rtcClient.localName === '' || rtcClient.remoteName !== '') return <></> // 名前が入力されていたらフォームを表示しない
 

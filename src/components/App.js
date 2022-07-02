@@ -1,26 +1,16 @@
-import React, {useReducer, useState} from 'react';
+import React from 'react';
 
-import InputFormLocal from './InputFormLocal';
-import InputFormRemote from './InputFormRemote';
 import VideoGrid from './VideoGrid';
-import RtcClient from '../utils/RtcClient';
+import useRtcClient from './hooks/useRtcClient';
+import InputForms from './InputForms';
 
 const App = () => {
-  const [rtcClient, _setRtcClient] = useState(new RtcClient());
-  const [, forceRender] = useReducer( (boolean) => !boolean, false);
-
-  //useState（値の更新）とuseReducer（再レンダリング）を両方行う関数
-  const setRtcClient = () => {
-    _setRtcClient(rtcClient);
-    forceRender();
-  }
+  const rtcClient = useRtcClient(); // 初期化されたものを取得
 
   console.log(rtcClient)
-
   return (
     <>
-      <InputFormLocal rtcClient={rtcClient} setRtcClient={setRtcClient} />
-      <InputFormRemote rtcClient={rtcClient} setRtcClient={setRtcClient} />
+      <InputForms rtcClient={rtcClient} />
       <VideoGrid rtcClient={rtcClient} />
     </>
   )

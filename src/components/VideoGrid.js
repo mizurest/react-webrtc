@@ -15,6 +15,9 @@ const VideoGrid = (props) => {
     const { rtcClient } = props;
     const classes = useStyles();
 
+    if(rtcClient === null) return <></>;
+    console.log("t2")
+
         return (
           <div className={classes.root}>
             <Grid container spacing={3}>
