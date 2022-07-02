@@ -2,18 +2,17 @@ import React, { useRef, useEffect } from 'react';
 import Video from './Video';
 
 const VideoLocal = (props) => {
-  const { localName } = props
+  const { rtcClient } = props
     const videoRef = useRef(null)
     const currentVideoRef = videoRef.current
+    const mediaStream = rtcClient.mediaStream
 
     useEffect(() => {
       if(currentVideoRef === null) return
-      const getMedia = async () => {
-          const constraints = {audio: true, video: true} //　要求するメディアの種類を指定
+      const getMedia = () => {
         
           try {
             // MediaStreamを受け取ってRefに設定
-            const mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
             currentVideoRef.srcObject = mediaStream
           } catch(err) {
             console.error(err)
@@ -21,10 +20,10 @@ const VideoLocal = (props) => {
         }
         
       getMedia();
-    },[currentVideoRef])
+    },[currentVideoRef, mediaStream])
 
     return (
-      <Video isLocal={true} name={localName} videoRef={videoRef}/>
+      <Video isLocal={true} name={rtcClient.localName} videoRef={videoRef}/>
     );
 }
 

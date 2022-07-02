@@ -12,9 +12,22 @@ export default class RtcClient {
         this.localName = "";
         this.remoteName = "";
         this._setRtcClient = setRtcClient;
+        this.mediaStream = null
     }
 
     setRtcClient() {
         this._setRtcClient(this)
+    }
+
+    
+    async getUserMedia(){
+        try{
+            const constraints = { audio: true, video: true }
+            this.mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
+    
+        }catch (err){
+            console.error(err)
+        }
+
     }
 }

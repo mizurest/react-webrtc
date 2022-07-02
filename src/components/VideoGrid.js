@@ -22,10 +22,10 @@ const VideoGrid = (props) => {
           <div className={classes.root}>
             <Grid container spacing={3}>
               <Grid item xs={6}>
-                <VideoLocal localName={rtcClient.localName}/>
+                <VideoLocal rtcClient={rtcClient}/>
               </Grid>
               <Grid item xs={6}>
-                <VideoRemote remoteName={rtcClient.remoteName}/>
+                <VideoRemote rtcClient={rtcClient}/>
               </Grid>
             </Grid>
           </div>

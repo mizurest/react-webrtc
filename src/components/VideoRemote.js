@@ -1,12 +1,12 @@
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
 import Video from './Video';
 
 const VideoRemote = (props) => {
-    const { remoteName } = props
+    const { rtcClient } = props
     const videoRef = null
 
     return (
-      <Video isLocal={true} name={remoteName} videoRef={videoRef}/>
+      <Video isLocal={true} name={rtcClient.remoteName} videoRef={videoRef}/>
     );
 }
 
