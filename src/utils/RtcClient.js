@@ -30,4 +30,9 @@ export default class RtcClient {
         }
 
     }
+
+    startListening(name){
+        this.localName = name
+        this.setRtcClient()
+    }
 }

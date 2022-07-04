@@ -73,8 +73,9 @@ const InputFormLocal = (props) => {
 
   const initLocalName = useCallback((e) => {
     console.log(`SUBMIT!${name}`)
-    rtcClient.localName = name
-    rtcClient.setRtcClient()
+    rtcClient.startListening(name)
+    // rtcClient.localName = name
+    // rtcClient.setRtcClient()
     e.preventDefault()
   }, [name, rtcClient])
 
