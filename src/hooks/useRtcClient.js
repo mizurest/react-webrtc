@@ -1,6 +1,6 @@
 import {useEffect, useReducer, useState} from 'react';
 
-import RtcClient from '../../utils/RtcClient'
+import RtcClient from '../utils/RtcClient'
 
 const useRtcClient = () => {
     const [rtcClient, _setRtcClient] = useState(null);

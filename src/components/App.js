@@ -1,7 +1,7 @@
 import React from 'react';
 
 import VideoGrid from './VideoGrid';
-import useRtcClient from './hooks/useRtcClient';
+import useRtcClient from '../hooks/useRtcClient';
 import InputForms from './InputForms';
 
 const App = () => {
