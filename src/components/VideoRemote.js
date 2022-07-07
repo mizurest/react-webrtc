@@ -3,7 +3,7 @@ import Video from './Video';
 
 const VideoRemote = (props) => {
     const { rtcClient } = props
-    const videoRef = null
+    const videoRef = rtcClient.remoteVideoRef
 
     return (
       <Video isLocal={true} name={rtcClient.remoteName} videoRef={videoRef}/>
