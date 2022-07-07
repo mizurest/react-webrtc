@@ -58,13 +58,39 @@ export default class RtcClient {
         this.rtcPeerConnection.addTrack(videoTrack, this.mediaStream)
     }
 
-    startListening(name) {
-        this.localName = name
+    connect(remoteName) {
+        this.remoteName = remoteName
+        this.setOnicecandidate()
+        this.setOntrack()
+        this.setRtcClient()
+    }
+
+    setOnicecandidate() {
+        this.rtcPeerConnection.onicecandidate = (e) => {
+            if(e.candidate){
+                // 相手に通信経路(candidate)を送信
+            }
+        }
+    }
+
+    setOntrack() {
+        this.rtcPeerConnection.ontrack = (RTCTrackEvent) => {
+            if(RTCTrackEvent.track.kind !== "video") return
+
+            const remoteMediaStream = RTCTrackEvent.streams[0]
+            this.remoteVideoRef.current.srcObject = remoteMediaStream
+            this.setRtcClient()
+        }
+        this.setRtcClient()
+    }
+
+    startListening(localName) {
+        this.localName = localName
         this.setRtcClient()
 
         //シグナリングサーバをリスンする処理
         this.firebaseSignalingClient.database
-            .ref(name)
+            .ref(localName)
             .on('value', (snapshot) => {
                 const data = snapshot.val()
             })

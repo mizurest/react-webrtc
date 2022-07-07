@@ -73,8 +73,7 @@ const InputFormRemote = (props) => {
 
   const initRemoteName = useCallback((e) => {
     console.log(`SUBMIT!${name}`)
-    rtcClient.remoteName = name
-    rtcClient.setRtcClient()
+    rtcClient.connect(name)
     e.preventDefault()
   }, [name, rtcClient])
 
