@@ -22,7 +22,8 @@ export default class RtcClient {
         this._setRtcClient(this)
     }
 
-    async getUserMedia(){
+    // ユーザーにメディアの使用許可を出してmediastreamを受け取るメソッド
+    async getUserMedia() {
         try {
             const constraints = { audio: true, video: true }
             this.mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
@@ -32,7 +33,31 @@ export default class RtcClient {
         }
     }
 
-    startListening(name){
+    // ユーザーのメディアを取得してmediastreamを設定するメソッド
+    async setMediaStream() {
+        await this.getUserMedia()
+        this.addTracks()
+        this.setRtcClient()
+    }
+
+    addTracks() {
+        this.addAudioTrack()
+        this.addVideoTrack()
+    }
+
+    addAudioTrack() {
+        const audioTrack = this.mediaStream.getAudioTracks()[0]
+        console.log(audioTrack)
+        this.rtcPeerConnection.addTrack(audioTrack, this.mediaStream)
+    }
+
+    addVideoTrack() {
+        const videoTrack = this.mediaStream.getVideoTracks()[0]
+        console.log(videoTrack)
+        this.rtcPeerConnection.addTrack(videoTrack, this.mediaStream)
+    }
+
+    startListening(name) {
         this.localName = name
         this.setRtcClient()
 

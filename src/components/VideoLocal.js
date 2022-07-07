@@ -11,13 +11,13 @@ const VideoLocal = (props) => {
       if(currentVideoRef === null) return
       const getMedia = () => {
         
-          try {
-            // MediaStreamを受け取ってRefに設定
-            currentVideoRef.srcObject = mediaStream
-          } catch(err) {
-            console.error(err)
-          }
+        try {
+          // MediaStreamを受け取ってRefに設定
+          currentVideoRef.srcObject = mediaStream
+        } catch(err) {
+          console.error(err)
         }
+      }
         
       getMedia();
     },[currentVideoRef, mediaStream])

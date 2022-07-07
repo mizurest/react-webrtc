@@ -16,7 +16,6 @@ const VideoGrid = (props) => {
     const classes = useStyles();
 
     if(rtcClient === null) return <></>;
-    console.log("t2")
 
         return (
           <div className={classes.root}>
