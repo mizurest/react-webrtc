@@ -58,6 +58,21 @@ export default class RtcClient {
         this.rtcPeerConnection.addTrack(videoTrack, this.mediaStream)
     }
 
+    async answer(sender, sessionDescription) {
+        try{
+            this.remoteName = sender
+            this.setOnicecandidate()
+            this.setOntrack()
+            await this.setRemoteDescription(sessionDescription)
+            const answer = await this.rtcPeerConnection.createAnswer();
+            await this.rtcPeerConnection.setLocalDescription(answer);
+
+            await this.sendAnswer()
+        }catch(e){
+            console.error(e)
+        }
+    }
+
     async connect(remoteName) {
         this.remoteName = remoteName
         this.setOnicecandidate()
@@ -103,25 +118,68 @@ export default class RtcClient {
         try {
             await this.rtcPeerConnection.setLocalDescription(sessionDescription)
         } catch(e) {
-            console.err(e)
+            console.error(e)
         }
+    }
+
+    async setRemoteDescription(sessionDescription) {
+        await this.rtcPeerConnection.setRemoteDescription(sessionDescription)
     }
 
     async sendOffer(){
         this.firebaseSignalingClient.setNames(this.localName, this.remoteName)
-        // firebaseに送信
-        await this.firebaseSignalingClient.sendOffer(this.rtcPeerConnection.localDescription.toJSON())
+
+        // firebaseにoffer送信
+        await this.firebaseSignalingClient.sendOffer(this.localDescription)
     }
 
-    startListening(localName) {
+    async sendAnswer() {
+        this.firebaseSignalingClient.setNames(this.localName, this.remoteName)
+
+        // firebaseにanswer送信
+        await this.firebaseSignalingClient.sendAnswer(this.localDescription)
+    }
+
+    get localDescription() {
+        console.log(this.rtcPeerConnection.localDescription)
+        return this.rtcPeerConnection.localDescription.toJSON();
+    }
+
+    async saveRecievedSessionDescription(sessionDescription){
+        try {
+            await this.setRemoteDescription(sessionDescription)
+        } catch(e){
+            console.error(e)
+        }
+    }
+
+    async startListening(localName) {
         this.localName = localName
         this.setRtcClient()
 
+        // await this.firebaseSignalingClient.remove(localName)
         //シグナリングサーバをリスンする処理
         this.firebaseSignalingClient.database
             .ref(localName)
-            .on('value', (snapshot) => {
+            .on('value', async(snapshot) => {
                 const data = snapshot.val()
+                console.log(data)
+                if(data === null) return
+                const {sender, sessionDescription, type} = data
+                switch(type){
+                    case 'offer':
+                        console.log(sessionDescription)
+                        await this.answer(sender, sessionDescription)
+                        console.log('case offer')
+                        break
+                    case 'answer':
+                        await this.saveRecievedSessionDescription(sessionDescription)
+                        console.log('case answer')
+                        break
+                    default:
+                        console.log('case default')
+                        break
+                }
             })
     }
 }

@@ -71,11 +71,8 @@ const InputFormLocal = (props) => {
     }
   },[name])
 
-  const initLocalName = useCallback((e) => {
-    console.log(`SUBMIT!${name}`)
-    rtcClient.startListening(name)
-    // rtcClient.localName = name
-    // rtcClient.setRtcClient()
+  const initLocalName = useCallback(async(e) => {
+    await rtcClient.startListening(name)
     e.preventDefault()
   }, [name, rtcClient])
 
@@ -105,9 +102,9 @@ const InputFormLocal = (props) => {
               autoFocus
               value={name}
               onChange={(e) => { setName(e.target.value) }}
-              onKeyDown={(e) => {
+              onKeyDown={async(e) => {
                 if(e.target.value === '' || isComposed) return // 空文字状態か変換中のエンター押下の場合、処理を止める
-                if(e.key === "Enter") { initLocalName(e) } // それ以外のエンター押下、名前を保持
+                if(e.key === "Enter") { await initLocalName(e) } // それ以外のエンター押下、名前を保持
               }}
               onCompositionStart={() => setIsComposed(true)}
               onCompositionEnd={() => setIsComposed(false)}
@@ -119,7 +116,7 @@ const InputFormLocal = (props) => {
               color="primary"
               className={classes.submit}
               disabled={disable}
-              onClick={(e) => { initLocalName(e) }} // ボタンクリックで名前を保持
+              onClick={async(e) => { await initLocalName(e) }} // ボタンクリックで名前を保持
             >
               登録
             </Button>

@@ -35,4 +35,16 @@ export default class FirebaseSignalingClient {
             sessionDescription,
         })
     }
+
+    async sendAnswer(sessionDescription) {
+        await this.targetRef.set({
+            type: 'answer',
+            sender: this.localName,
+            sessionDescription,
+        })
+    }
+
+    async remove(localName) {
+        await this.database.ref(localName).remove()
+    }
 }
