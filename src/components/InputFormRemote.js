@@ -71,9 +71,8 @@ const InputFormRemote = (props) => {
     }
   },[name])
 
-  const initRemoteName = useCallback((e) => {
-    console.log(`SUBMIT!${name}`)
-    rtcClient.connect(name)
+  const initRemoteName = useCallback(async(e) => {
+    await rtcClient.connect(name)
     e.preventDefault()
   }, [name, rtcClient])
 
@@ -103,9 +102,9 @@ const InputFormRemote = (props) => {
               autoFocus
               value={name}
               onChange={(e) => { setName(e.target.value) }}
-              onKeyDown={(e) => {
+              onKeyDown={async(e) => {
                 if(e.target.value === '' || isComposed) return // 空文字状態か変換中のエンター押下の場合、処理を止める
-                if(e.key === "Enter") { initRemoteName(e) } // それ以外のエンター押下、名前を保持
+                if(e.key === "Enter") { await initRemoteName(e) } // それ以外のエンター押下、名前を保持
               }}
               onCompositionStart={() => setIsComposed(true)}
               onCompositionEnd={() => setIsComposed(false)}
@@ -117,7 +116,7 @@ const InputFormRemote = (props) => {
               color="primary"
               className={classes.submit}
               disabled={disable}
-              onClick={(e) => { initRemoteName(e) }} // ボタンクリックで名前を保持
+              onClick={async(e) => { await initRemoteName(e) }} // ボタンクリックで名前を保持
             >
               登録
             </Button>

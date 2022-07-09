@@ -17,4 +17,22 @@ export default class FirebaseSignalingClient {
         this.localName = "";
         this.remoteName = "";
     }
+
+    setNames(localName, remoteName) {
+        this.localName = localName;
+        this.remoteName = remoteName;
+
+    }
+
+    get targetRef() {
+        return this.database.ref(this.remoteName)
+    }
+
+    async sendOffer(sessionDescription) {
+        await this.targetRef.set({
+            type: 'offer',
+            sender: this.localName,
+            sessionDescription,
+        })
+    }
 }
