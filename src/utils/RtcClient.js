@@ -82,11 +82,23 @@ export default class RtcClient {
     }
 
     setOnicecandidate() {
-        this.rtcPeerConnection.onicecandidate = (e) => {
+        this.rtcPeerConnection.onicecandidate = async(e) => {
             if(e.candidate){
                 // 相手に通信経路(candidate)を送信
+                console.log(e.candidate)
+                await this.firebaseSignalingClient.sendCandidate(e.candidate.toJSON())
             }
         }
+    }
+
+    async addIceCandidate(candidate){
+        try{
+            const candidateObj = new RTCIceCandidate(candidate)
+            await this.rtcPeerConnection.addIceCandidate(candidateObj)
+        }catch(e){
+            console.error(e)
+        }
+        
     }
 
     setOntrack() {
@@ -153,6 +165,7 @@ export default class RtcClient {
         }
     }
 
+
     async startListening(localName) {
         this.localName = localName
         this.setRtcClient()
@@ -165,19 +178,23 @@ export default class RtcClient {
                 const data = snapshot.val()
                 console.log(data)
                 if(data === null) return
-                const {sender, sessionDescription, type} = data
+                const { candidate, sender, sessionDescription, type } = data
                 switch(type){
                     case 'offer':
                         console.log(sessionDescription)
                         await this.answer(sender, sessionDescription)
-                        console.log('case offer')
+                        // console.log('case offer')
                         break
                     case 'answer':
                         await this.saveRecievedSessionDescription(sessionDescription)
-                        console.log('case answer')
+                        // console.log('case answer')
+                        break
+                    case 'candidate':
+                        await this.addIceCandidate(candidate)
                         break
                     default:
-                        console.log('case default')
+                        // console.log('case default')
+                        this.setRtcClient()
                         break
                 }
             })

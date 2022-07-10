@@ -6,7 +6,7 @@ const VideoRemote = (props) => {
     const videoRef = rtcClient.remoteVideoRef
 
     return (
-      <Video isLocal={true} name={rtcClient.remoteName} videoRef={videoRef}/>
+      <Video isLocal={false} name={rtcClient.remoteName} videoRef={videoRef}/>
     );
 }
 
